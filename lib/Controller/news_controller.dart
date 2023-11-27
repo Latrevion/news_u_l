@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:news_u_l/Controller/api_helper.dart';
+import '../Model/news_model.dart';
 
 class NewsController extends GetxController {
   final box = GetStorage();
-
 
   void changeThemeMode() {
     String? theme = box.read('theme');
@@ -19,22 +20,35 @@ class NewsController extends GetxController {
     update();
   }
 
-  IconData iconTheme(){
-    String? theme =box.read('theme');
+  IconData iconTheme() {
+    String? theme = box.read('theme');
 
-    if(theme =='dark'){
-      return   Icons.dark_mode;
-    }else{
+    if (theme == 'dark') {
+      return Icons.dark_mode;
+    } else {
       return Icons.light_mode;
     }
-
   }
 
-  int index=0;
-  void changeNavBar({required int currentIndex}){
-    index= currentIndex;
+  int index = 0;
+
+  void changeNavBar({required int currentIndex}) {
+    index = currentIndex;
     update();
   }
 
+  NewsHelper newsHelper = NewsHelper();
 
+  List<NewsModel> list=[];
+
+  void getHeadlines() async{
+    list = await newsHelper.getHeadlines();
+    update();
+  }
+
+  @override
+  void onInit() {
+    getHeadlines();
+     super.onInit();
+  }
 }
