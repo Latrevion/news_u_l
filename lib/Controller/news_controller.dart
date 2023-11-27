@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:news_u_l/Controller/api_helper.dart';
+import 'package:news_u_l/shared/constant.dart';
 import '../Model/news_model.dart';
 
 class NewsController extends GetxController {
@@ -44,6 +45,13 @@ class NewsController extends GetxController {
   void getHeadlines() async{
     list = await newsHelper.getHeadlines();
     update();
+  }
+
+  List<NewsModel> categoryList=[];
+
+  Future<List<NewsModel>> getCategory({required String category}) async {
+    categoryList = await newsHelper.getNewsCategory(category: category);
+    return categoryList;
   }
 
   @override

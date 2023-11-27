@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:news_u_l/Controller/news_controller.dart';
+import 'package:news_u_l/Model/news_model.dart';
 import 'package:news_u_l/View/widgets/list_items.dart';
 import '../../shared/constant.dart';
+import 'package:get/get.dart';
 
 class CategoryWidget extends StatefulWidget {
   const CategoryWidget({super.key});
@@ -12,6 +15,8 @@ class CategoryWidget extends StatefulWidget {
 class _CategoryWidgetState extends State<CategoryWidget>
     with SingleTickerProviderStateMixin {
   late TabController? controller;
+
+  final newsController = Get.put(NewsController());
 
   @override
   void initState() {
@@ -35,9 +40,21 @@ class _CategoryWidgetState extends State<CategoryWidget>
         Expanded(
             child: TabBarView(
                 controller: controller,
-                children: CategoryList.categoryItems
-                    .map((e) => ListItems(list: [],))
-                    .toList()))
+                children: CategoryList.categoryItems.map((e) {
+                  return FutureBuilder(
+                      future: newsController.getCategory(category: e),
+                      builder: (context, snapShot) {
+                        if (snapShot.hasData) {
+                          return ListItems(
+                            list: snapShot.data as List<NewsModel>,
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      });
+                }).toList()))
       ],
     );
   }
