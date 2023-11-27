@@ -29,4 +29,12 @@ class NewsController extends GetxController {
     }
 
   }
+
+  int index=0;
+  void changeNavBar({required int currentIndex}){
+    index= currentIndex;
+    update();
+  }
+
+
 }
